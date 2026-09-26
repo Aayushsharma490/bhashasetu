@@ -36,8 +36,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     { to: '/flashcards', label: 'Flashcards', icon: Layers },
     { to: '/language-packs', label: 'Language Packs', icon: Globe2 },
     { to: '/history', label: 'History', icon: History },
-    { to: '/settings', label: 'Settings', icon: Settings },
-    { to: '/about', label: 'About & Arch', icon: Info },
+    { to: '/settings', label: 'Settings', icon: Settings }
   ];
 
   return (

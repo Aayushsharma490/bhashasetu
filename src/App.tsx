@@ -12,7 +12,6 @@ import FlashcardsPage from './pages/FlashcardsPage';
 import LanguagePacksPage from './pages/LanguagePacksPage';
 import HistoryPage from './pages/HistoryPage';
 import SettingsPage from './pages/SettingsPage';
-import AboutPage from './pages/AboutPage';
 import OfflineDemoPage from './pages/OfflineDemoPage';
 
 export const App: React.FC = () => {
@@ -109,15 +108,6 @@ export const App: React.FC = () => {
           element={
             <AppShell>
               <SettingsPage />
-            </AppShell>
-          }
-        />
-
-        <Route
-          path="/about"
-          element={
-            <AppShell>
-              <AboutPage />
             </AppShell>
           }
         />

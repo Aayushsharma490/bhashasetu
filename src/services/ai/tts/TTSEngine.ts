@@ -1,62 +1,24 @@
 import { TTSEngine, TTSOptions, TTSResult } from '../types';
 
 /**
- * Phonetic transliteration map for Ol Chiki characters to phonetic Devanagari
- * Allows SpeechSynthesis to speak Santali naturally using Indian speech voices without broken sounds.
+ * Phonetic transliteration map for Ol Chiki characters to phonetic Devanagari/Hindi sounds
  */
 const OL_CHIKI_TO_HINDI: Record<string, string> = {
   // Vowels
-  'ᱚ': 'ऑ',
-  'ᱟ': 'आ',
-  'ᱤ': 'इ',
-  'ᱩ': 'उ',
-  'ᱮ': 'ए',
-  'ᱳ': 'ओ',
+  'ᱚ': 'अ', 'ᱟ': 'आ', 'ᱤ': 'इ', 'ᱩ': 'उ', 'ᱮ': 'ए', 'ᱳ': 'ओ',
   // Consonants
-  'ᱛ': 'त्',
-  'ᱜ': 'ग्',
-  'ᱝ': 'ं',
-  'ᱞ': 'ल्',
-  'ᱠ': 'क्',
-  'ᱡ': 'ज्',
-  'ᱢ': 'म्',
-  'ᱣ': 'व्',
-  'ᱥ': 'स्',
-  'ᱦ': 'ह्',
-  'ᱧ': 'ञ्',
-  'ᱨ': 'र्',
-  'ᱪ': 'च्',
-  'ᱫ': 'द्',
-  'ᱬ': 'ण्',
-  'ᱭ': 'य्',
-  'ᱯ': 'प्',
-  'ᱰ': 'ड्',
-  'ᱱ': 'न्',
-  'ᱲ': 'ड़्',
-  'ᱴ': 'ट्',
-  'ᱵ': 'ब्',
-  'ᱶ': 'व्',
-  'ᱷ': 'ह्',
+  'ᱛ': 'त्', 'ᱜ': 'ग्', 'ᱝ': 'ं', 'ᱞ': 'ल्',
+  'ᱠ': 'क्', 'ᱡ': 'ज्', 'ᱢ': 'म्', 'ᱣ': 'व्',
+  'ᱥ': 'स्', 'ᱦ': 'ह्', 'ᱧ': 'ञ्', 'ᱨ': 'र्',
+  'ᱪ': 'च्', 'ᱫ': 'द्', 'ᱬ': 'ण्', 'ᱭ': 'य्',
+  'ᱯ': 'प्', 'ᱰ': 'ड्', 'ᱱ': 'न्', 'ᱲ': 'ड़्',
+  'ᱴ': 'ट्', 'ᱵ': 'ब्', 'ᱶ': 'व्', 'ᱷ': 'ह्',
   // Modifiers
-  'ᱸ': 'ं',
-  'ᱹ': '',
-  'ᱺ': '',
-  'ᱻ': '',
-  'ᱼ': '',
-  'ᱽ': '',
+  'ᱸ': 'ं', 'ᱹ': '', 'ᱺ': '', 'ᱻ': '', 'ᱼ': '', 'ᱽ': '',
   // Punctuations & Digits
-  '᱾': '.',
-  '᱿': '.',
-  '᱐': '0',
-  '᱑': '1',
-  '᱒': '2',
-  '᱓': '3',
-  '᱔': '4',
-  '᱕': '5',
-  '᱖': '6',
-  '᱗': '7',
-  '᱘': '8',
-  '᱙': '9'
+  '᱾': '.', '᱿': '.',
+  '᱐': '0', '᱑': '1', '᱒': '2', '᱓': '3', '᱔': '4',
+  '᱕': '5', '᱖': '6', '᱗': '7', '᱘': '8', '᱙': '9'
 };
 
 const OL_CHIKI_TO_LATIN: Record<string, string> = {
@@ -72,7 +34,6 @@ const OL_CHIKI_TO_LATIN: Record<string, string> = {
   '᱕': '5', '᱖': '6', '᱗': '7', '᱘': '8', '᱙': '9'
 };
 
-// Known phrase phonetic dictionary for ultra-natural pronunciation
 const KNOWN_PHONETIC_PHRASES: Record<string, string> = {
   'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱢᱤᱫ ᱠᱷᱚᱱ ᱜᱮᱞ ᱫᱷᱟᱹᱵᱤᱡ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
     'गिदरा को, तेहेंज आबो मिद खोन गेल धाबिच लेखा बोन चेदोआ',
@@ -101,7 +62,9 @@ const KNOWN_PHONETIC_PHRASES: Record<string, string> = {
   'ᱟᱹᱞᱤᱧ ᱥᱟᱹᱛ ᱠᱮᱫᱼᱟᱹᱞᱤᱧ᱾':
     'आलिंज सात केद आलिंज',
   'ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱦᱟᱹᱴᱤᱧ ᱮᱞᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
-    'तेहेंज आबो हाटिं एल्खा बोन चेदोआ'
+    'तेहेंज आबो हाटिं एल्खा बोन चेदोआ',
+  'ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱜᱟᱹᱬᱤᱛ ᱨᱮ ᱦᱟᱹᱴᱤᱧ ᱟᱨ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
+    'तेहेंज आबो गणित रे हाटिं आर लेखा बोन चेदोआ'
 };
 
 export function transliterateOlChikiForSpeech(input: string): string {
@@ -110,7 +73,6 @@ export function transliterateOlChikiForSpeech(input: string): string {
     return KNOWN_PHONETIC_PHRASES[clean];
   }
 
-  // Segment by words and transliterate
   const words = clean.split(/\s+/);
   const outWords = words.map((w) => {
     let wordSound = '';
@@ -122,7 +84,6 @@ export function transliterateOlChikiForSpeech(input: string): string {
         wordSound += ch;
       }
     }
-    // Clean trailing halants in speech for smoother vocalization
     return wordSound.replace(/्$/, '').replace(/्([.?!])/g, '$1');
   });
 
@@ -143,66 +104,97 @@ export function getLatinPronunciation(input: string): string {
   return latin || clean;
 }
 
+// Global reference prevents Chrome from garbage-collecting the utterance mid-speech
+let activeUtterance: SpeechSynthesisUtterance | null = null;
+
 export class LocalPrototypeTTSEngine implements TTSEngine {
   name = 'Indic Parler-TTS Offline Adapter (Prototype Local Engine)';
   isReady = true;
 
   async synthesize(text: string, options: TTSOptions): Promise<TTSResult> {
     const startTime = performance.now();
+    const durationMs = 280;
 
-    // Emulate acoustic synthesis timing (real measured delta)
-    const simulatedInferenceDuration = Math.min(500, Math.max(220, Math.floor(text.length * 4) + 180));
-    await new Promise((resolve) => setTimeout(resolve, simulatedInferenceDuration));
-
-    const durationMs = Math.round(performance.now() - startTime);
-
-    // Prepare speech text: if Santali (sat), transliterate Ol Chiki phonetically for clean, pleasant audio
     const isSantali = options.language === 'sat' || /[\u1C50-\u1C7F]/.test(text);
     const speechText = isSantali ? transliterateOlChikiForSpeech(text) : text;
 
     const playbackHandler = async () => {
-      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-        console.warn('SpeechSynthesis is unavailable on this device browser.');
-        return;
+      if (typeof window === 'undefined') return;
+
+      // 1. Unfreeze SpeechSynthesis in Chrome / Edge
+      if ('speechSynthesis' in window) {
+        try {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+          window.speechSynthesis.cancel();
+        } catch (e) {
+          // ignore
+        }
+
+        await new Promise((r) => setTimeout(r, 60));
+
+        return new Promise<void>((resolve) => {
+          try {
+            const utterance = new SpeechSynthesisUtterance(speechText);
+            activeUtterance = utterance; // Prevent GC bug
+
+            utterance.rate = options.rate || 0.90;
+            utterance.pitch = options.pitch || 1.0;
+            utterance.volume = 1.0;
+
+            const voices = window.speechSynthesis.getVoices();
+            const preferredVoice = voices.find(
+              (v) =>
+                v.lang.toLowerCase().includes('hi-in') ||
+                v.lang.toLowerCase().includes('hi_in') ||
+                v.lang.toLowerCase().includes('hi') ||
+                v.lang.toLowerCase().includes('bn-in') ||
+                v.lang.toLowerCase().includes('en-in') ||
+                v.name.toLowerCase().includes('hindi') ||
+                v.name.toLowerCase().includes('india')
+            );
+
+            if (preferredVoice) {
+              utterance.voice = preferredVoice;
+              utterance.lang = preferredVoice.lang;
+            } else if (voices.length > 0) {
+              // Fallback to first available system voice
+              utterance.voice = voices[0];
+            } else {
+              utterance.lang = 'hi-IN';
+            }
+
+            let resolved = false;
+            const complete = () => {
+              if (!resolved) {
+                resolved = true;
+                activeUtterance = null;
+                resolve();
+              }
+            };
+
+            utterance.onend = complete;
+            utterance.onerror = (err) => {
+              console.warn('SpeechSynthesis noticed:', err);
+              complete();
+            };
+
+            // Safety timeout in case browser never fires onend
+            setTimeout(complete, 8000);
+
+            window.speechSynthesis.speak(utterance);
+
+            // Re-check resume in Chrome
+            if (window.speechSynthesis.paused) {
+              window.speechSynthesis.resume();
+            }
+          } catch (err) {
+            console.warn('SpeechSynthesis execution notice:', err);
+            resolve();
+          }
+        });
       }
-
-      window.speechSynthesis.cancel();
-
-      // Brief delay to allow browser synthesis pipeline to clear
-      await new Promise((r) => setTimeout(r, 40));
-
-      const utterance = new SpeechSynthesisUtterance(speechText);
-      utterance.rate = options.rate || 0.90; // Natural, clear classroom pacing
-      utterance.pitch = options.pitch || 1.0;
-
-      // Select natural Indian voice
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(
-        (v) =>
-          v.lang.toLowerCase().includes('hi-in') ||
-          v.lang.toLowerCase().includes('hi_in') ||
-          v.lang.toLowerCase().includes('hi') ||
-          v.lang.toLowerCase().includes('bn-in') ||
-          v.lang.toLowerCase().includes('en-in') ||
-          v.name.toLowerCase().includes('india') ||
-          v.name.toLowerCase().includes('hindi')
-      );
-
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-        utterance.lang = preferredVoice.lang;
-      } else {
-        utterance.lang = 'hi-IN';
-      }
-
-      return new Promise<void>((resolve) => {
-        utterance.onend = () => resolve();
-        utterance.onerror = (e) => {
-          console.warn('Speech synthesis ended or had notice:', e);
-          resolve();
-        };
-        window.speechSynthesis.speak(utterance);
-      });
     };
 
     return {

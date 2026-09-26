@@ -235,6 +235,12 @@ export const TranslatorPage: React.FC = () => {
         latencyMs: res.metrics.totalTimeMs,
         mode: 'teacher'
       });
+
+      // Auto-play synthesized Santali speech audio immediately
+      if (res.playAudio) {
+        setIsPlaying(true);
+        res.playAudio().finally(() => setIsPlaying(false));
+      }
     } catch (e) {
       console.error(e);
       setPipelineStage('error');
@@ -270,6 +276,12 @@ export const TranslatorPage: React.FC = () => {
         latencyMs: res.metrics.totalTimeMs,
         mode: 'teacher'
       });
+
+      // Auto-play synthesized Santali speech audio immediately
+      if (res.playAudio) {
+        setIsPlaying(true);
+        res.playAudio().finally(() => setIsPlaying(false));
+      }
     } catch (e) {
       console.error(e);
       setPipelineStage('error');
