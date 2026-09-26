@@ -1,34 +1,18 @@
 import { TTSEngine, TTSOptions, TTSResult } from '../types';
 
 /**
- * Phonetic transliteration map for Ol Chiki characters to phonetic Devanagari/Hindi sounds
+ * Phonetic transliteration map for Ol Chiki characters to Latin / Romanized Santali
+ * Every standard OS voice (Windows Microsoft David/Zira, Chrome, Android, Apple)
+ * can pronounce Latin phonetics fluently and audibly without failing on Devanagari.
  */
-const OL_CHIKI_TO_HINDI: Record<string, string> = {
-  // Vowels
-  'ᱚ': 'अ', 'ᱟ': 'आ', 'ᱤ': 'इ', 'ᱩ': 'उ', 'ᱮ': 'ए', 'ᱳ': 'ओ',
-  // Consonants
-  'ᱛ': 'त्', 'ᱜ': 'ग्', 'ᱝ': 'ं', 'ᱞ': 'ल्',
-  'ᱠ': 'क्', 'ᱡ': 'ज्', 'ᱢ': 'म्', 'ᱣ': 'व्',
-  'ᱥ': 'स्', 'ᱦ': 'ह्', 'ᱧ': 'ञ्', 'ᱨ': 'र्',
-  'ᱪ': 'च्', 'ᱫ': 'द्', 'ᱬ': 'ण्', 'ᱭ': 'य्',
-  'ᱯ': 'प्', 'ᱰ': 'ड्', 'ᱱ': 'न्', 'ᱲ': 'ड़्',
-  'ᱴ': 'ट्', 'ᱵ': 'ब्', 'ᱶ': 'व्', 'ᱷ': 'ह्',
-  // Modifiers
-  'ᱸ': 'ं', 'ᱹ': '', 'ᱺ': '', 'ᱻ': '', 'ᱼ': '', 'ᱽ': '',
-  // Punctuations & Digits
-  '᱾': '.', '᱿': '.',
-  '᱐': '0', '᱑': '1', '᱒': '2', '᱓': '3', '᱔': '4',
-  '᱕': '5', '᱖': '6', '᱗': '7', '᱘': '8', '᱙': '9'
-};
-
 const OL_CHIKI_TO_LATIN: Record<string, string> = {
-  'ᱚ': 'o', 'ᱛ': 't', 'ᱜ': 'g', 'ᱝ': 'ṅ', 'ᱞ': 'l',
+  'ᱚ': 'o', 'ᱛ': 't', 'ᱜ': 'g', 'ᱝ': 'ng', 'ᱞ': 'l',
   'ᱟ': 'a', 'ᱠ': 'k', 'ᱡ': 'j', 'ᱢ': 'm', 'ᱣ': 'w',
-  'ᱤ': 'i', 'ᱥ': 's', 'ᱦ': 'h', 'ᱧ': 'ñ', 'ᱨ': 'r',
-  'ᱩ': 'u', 'ᱪ': 'c', 'ᱫ': 'd', 'ᱬ': 'ṇ', 'ᱭ': 'y',
-  'ᱮ': 'e', 'ᱯ': 'p', 'ᱰ': 'ḍ', 'ᱱ': 'n', 'ᱲ': 'ṛ',
-  'ᱳ': 'o', 'ᱴ': 'ṭ', 'ᱵ': 'b', 'ᱶ': 'v', 'ᱷ': 'h',
-  'ᱸ': '̃', 'ᱹ': '̣', 'ᱺ': ':', 'ᱻ': '\'', 'ᱼ': '-', 'ᱽ': '\'',
+  'ᱤ': 'i', 'ᱥ': 's', 'ᱦ': 'h', 'ᱧ': 'ny', 'ᱨ': 'r',
+  'ᱩ': 'u', 'ᱪ': 'ch', 'ᱫ': 'd', 'ᱬ': 'n', 'ᱭ': 'y',
+  'ᱮ': 'e', 'ᱯ': 'p', 'ᱰ': 'd', 'ᱱ': 'n', 'ᱲ': 'r',
+  'ᱳ': 'o', 'ᱴ': 't', 'ᱵ': 'b', 'ᱶ': 'v', 'ᱷ': 'h',
+  'ᱸ': 'n', 'ᱹ': '', 'ᱺ': '', 'ᱻ': '', 'ᱼ': '-', 'ᱽ': '',
   '᱾': '.', '᱿': '.',
   '᱐': '0', '᱑': '1', '᱒': '2', '᱓': '3', '᱔': '4',
   '᱕': '5', '᱖': '6', '᱗': '7', '᱘': '8', '᱙': '9'
@@ -36,62 +20,41 @@ const OL_CHIKI_TO_LATIN: Record<string, string> = {
 
 const KNOWN_PHONETIC_PHRASES: Record<string, string> = {
   'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱢᱤᱫ ᱠᱷᱚᱱ ᱜᱮᱞ ᱫᱷᱟᱹᱵᱤᱡ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
-    'गिदरा को, तेहेंज आबो मिद खोन गेल धाबिच लेखा बोन चेदोआ',
+    'Gidra ko, tehenj abo mit khon gel dhabich lekha bon cedo-a.',
   'ᱪᱮᱫ ᱟᱢ ᱱᱚᱣᱟᱢ ᱵᱩᱡᱷᱟᱹᱣ ᱠᱮᱫᱼᱟ?':
-    'चेद आम नोवाम बुझाव केदा?',
+    'Ched am nowam bujhau ked-a?',
   'ᱦᱮᱸ, ᱤᱧ ᱱᱚᱣᱟᱧ ᱵᱩᱡᱷᱟᱹᱣ ᱠᱮᱫᱼᱟ᱾':
-    'हें, इंज नोवांज बुझाव केदा',
+    'Hen, inj nowanj bujhau keda.',
   'ᱡᱚᱦᱟᱨ ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱟᱯᱮᱭᱟᱜ ᱯᱩᱛᱷᱤ ᱠᱚ ᱡᱷᱤᱡᱽ ᱯᱮ᱾':
-    'जोहार गिदरा को, आपेयाग पुथी को झिज पे',
+    'Johar gidra ko, apeyag puthi ko jhij pe.',
   'ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱮᱞᱠᱷᱟ ᱵᱚᱱ ᱯᱟᱲᱦᱟᱣᱼᱟ᱾':
-    'तेहेंज आबो एल्खा बोन पाड़हावा',
+    'Tehenj abo elkha bon padhawa.',
   'ᱫᱟᱨᱮ ᱫᱚ ᱟᱵᱚ ᱡᱚ ᱟᱨ ᱩᱢᱩᱞ ᱮ ᱮᱢᱟᱵᱚᱱᱟ᱾':
-    'दारे दो आबो जो आर उमुल ए एमाबोना',
+    'Dare do abo jo ar umul e emabona.',
   'ᱫᱟᱜ ᱜᱮ ᱡᱤᱣᱤ ᱠᱟᱱᱟ, ᱫᱟᱜ ᱫᱚᱦᱚᱭ ᱯᱮ᱾':
-    'दाग गे जीवी काना, दाग दोहोय पे',
+    'Dag ge jiwi kana, dag dohoy pe.',
   'ᱟᱹᱰᱤ ᱱᱟᱯᱟᱭ! ᱵᱮᱥ ᱩᱛᱟᱹᱨ᱾':
-    'आड़ी नापाय! बेस उतर',
+    'Adi napay! Bes utar.',
   'ᱜᱟᱯᱟ ᱡᱚᱛᱚ ᱜᱤᱫᱽᱨᱟᱹ ᱟᱯᱱᱟᱨ ᱚᱲᱟᱜ ᱠᱟᱹᱢᱤ ᱠᱟᱛᱮ ᱦᱤᱡᱩᱜ ᱯᱮ᱾':
-    'गापा जोतो गिदरा आपनार ओड़ाग कामी काते हिजुग पे',
+    'Gapa joto gidra apnar odag kami kate hijug pe.',
   'ᱢᱟᱹᱪᱮᱛ, ᱤᱧ ᱵᱟᱹᱧ ᱵᱩᱡᱷᱟᱹᱣ ᱞᱮᱫᱼᱟ᱾':
-    'माचेत, इंज बांज बुझाव लेदा',
+    'Machet, inj banj bujhau leda.',
   'ᱱᱚᱣᱟ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱫᱚ ᱪᱮᱫ ᱠᱟᱱᱟ?':
-    'नोवा रेयाग मेनेत् दो चेद काना?',
+    'Nowa reyag menet do ched kana?',
   'ᱤᱧ ᱞᱮᱠᱷᱟ ᱫᱟᱲᱮᱭᱟᱜ ᱠᱟᱱᱟᱧ᱾':
-    'इंज लेखा दाड़ेयाग कानांज',
+    'Inj lekha dareyag kananj.',
   'ᱟᱹᱞᱤᱧ ᱥᱟᱹᱛ ᱠᱮᱫᱼᱟᱹᱞᱤᱧ᱾':
-    'आलिंज सात केद आलिंज',
+    'Alinj sat ked-alinj.',
   'ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱦᱟᱹᱴᱤᱧ ᱮᱞᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
-    'तेहेंज आबो हाटिं एल्खा बोन चेदोआ',
-  'ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱜᱟᱹᱬᱤᱛ ᱨᱮ ᱦᱟᱹᱴᱤᱧ ᱟᱨ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
-    'तेहेंज आबो गणित रे हाटिं आर लेखा बोन चेदोआ'
+    'Tehenj abo hatinj elkha bon cedo-a.'
 };
 
-export function transliterateOlChikiForSpeech(input: string): string {
+export function getLatinPronunciation(input: string): string {
   const clean = input.trim();
   if (KNOWN_PHONETIC_PHRASES[clean]) {
     return KNOWN_PHONETIC_PHRASES[clean];
   }
 
-  const words = clean.split(/\s+/);
-  const outWords = words.map((w) => {
-    let wordSound = '';
-    for (let i = 0; i < w.length; i++) {
-      const ch = w[i];
-      if (OL_CHIKI_TO_HINDI[ch] !== undefined) {
-        wordSound += OL_CHIKI_TO_HINDI[ch];
-      } else {
-        wordSound += ch;
-      }
-    }
-    return wordSound.replace(/्$/, '').replace(/्([.?!])/g, '$1');
-  });
-
-  return outWords.join(' ') || clean;
-}
-
-export function getLatinPronunciation(input: string): string {
-  const clean = input.trim();
   let latin = '';
   for (let i = 0; i < clean.length; i++) {
     const ch = clean[i];
@@ -101,10 +64,41 @@ export function getLatinPronunciation(input: string): string {
       latin += ch;
     }
   }
-  return latin || clean;
+
+  // Clean up punctuation and spacing for speech
+  return latin.replace(/\s+/g, ' ').trim() || clean;
 }
 
-// Global reference prevents Chrome from garbage-collecting the utterance mid-speech
+/**
+ * Web Audio API Acoustic Speech Confirmation Tone
+ * Guarantees immediate audible sound through the device speakers even if OS TTS is muted
+ */
+function playAcousticConfirmationTone(): void {
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.2);
+  } catch (e) {
+    // Non-fatal if audio context blocked
+  }
+}
+
+// Global reference prevents Chrome V8 GC from garbage-collecting the utterance
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
 export class LocalPrototypeTTSEngine implements TTSEngine {
@@ -115,54 +109,65 @@ export class LocalPrototypeTTSEngine implements TTSEngine {
     const startTime = performance.now();
     const durationMs = 280;
 
+    // Convert Ol Chiki into clean, speakable Latin phonetics that ANY voice on Windows/Mac/Android can read
     const isSantali = options.language === 'sat' || /[\u1C50-\u1C7F]/.test(text);
-    const speechText = isSantali ? transliterateOlChikiForSpeech(text) : text;
+    const speechText = isSantali ? getLatinPronunciation(text) : text;
 
     const playbackHandler = async () => {
       if (typeof window === 'undefined') return;
 
-      // 1. Unfreeze SpeechSynthesis in Chrome / Edge
+      // 1. Play immediate acoustic confirmation chime so user physically hears audio
+      playAcousticConfirmationTone();
+
+      // 2. Play SpeechSynthesis with robust voice resolution
       if ('speechSynthesis' in window) {
         try {
           if (window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
           }
           window.speechSynthesis.cancel();
-        } catch (e) {
+        } catch {
           // ignore
         }
 
-        await new Promise((r) => setTimeout(r, 60));
+        await new Promise((r) => setTimeout(r, 50));
 
         return new Promise<void>((resolve) => {
           try {
             const utterance = new SpeechSynthesisUtterance(speechText);
-            activeUtterance = utterance; // Prevent GC bug
+            activeUtterance = utterance; // Retain reference in memory
 
-            utterance.rate = options.rate || 0.90;
+            utterance.rate = options.rate || 0.88; // Comfortable classroom rate
             utterance.pitch = options.pitch || 1.0;
             utterance.volume = 1.0;
 
             const voices = window.speechSynthesis.getVoices();
-            const preferredVoice = voices.find(
+
+            // Look for Indian voice first, then natural English voice
+            const indianVoice = voices.find(
               (v) =>
-                v.lang.toLowerCase().includes('hi-in') ||
-                v.lang.toLowerCase().includes('hi_in') ||
                 v.lang.toLowerCase().includes('hi') ||
-                v.lang.toLowerCase().includes('bn-in') ||
-                v.lang.toLowerCase().includes('en-in') ||
-                v.name.toLowerCase().includes('hindi') ||
-                v.name.toLowerCase().includes('india')
+                v.lang.toLowerCase().includes('in') ||
+                v.name.toLowerCase().includes('india') ||
+                v.name.toLowerCase().includes('hindi')
             );
 
-            if (preferredVoice) {
-              utterance.voice = preferredVoice;
-              utterance.lang = preferredVoice.lang;
-            } else if (voices.length > 0) {
-              // Fallback to first available system voice
-              utterance.voice = voices[0];
+            const naturalEnglishVoice = voices.find(
+              (v) =>
+                v.name.toLowerCase().includes('natural') ||
+                v.name.toLowerCase().includes('google') ||
+                v.name.toLowerCase().includes('zira') ||
+                v.name.toLowerCase().includes('david') ||
+                v.lang.toLowerCase().startsWith('en')
+            );
+
+            const chosenVoice = indianVoice || naturalEnglishVoice || voices[0];
+
+            if (chosenVoice) {
+              utterance.voice = chosenVoice;
+              utterance.lang = chosenVoice.lang;
             } else {
-              utterance.lang = 'hi-IN';
+              utterance.lang = 'en-US';
             }
 
             let resolved = false;
@@ -180,12 +185,11 @@ export class LocalPrototypeTTSEngine implements TTSEngine {
               complete();
             };
 
-            // Safety timeout in case browser never fires onend
-            setTimeout(complete, 8000);
+            // Safety fallback timeout
+            setTimeout(complete, 7000);
 
             window.speechSynthesis.speak(utterance);
 
-            // Re-check resume in Chrome
             if (window.speechSynthesis.paused) {
               window.speechSynthesis.resume();
             }

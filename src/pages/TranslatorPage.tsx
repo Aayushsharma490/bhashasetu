@@ -663,14 +663,23 @@ export const TranslatorPage: React.FC = () => {
             </div>
 
             {/* MAIN OL CHIKI RESULT CARD (HIGH VISIBILITY, LARGEST ELEMENT) */}
-            <div className="p-6 bg-teal-50/70 border-2 border-teal-300/70 rounded-2xl space-y-4 min-h-[220px] flex flex-col justify-between">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-teal-900 uppercase tracking-wide">
+            <div className="p-6 bg-teal-50/80 border-2 border-teal-400/80 rounded-2xl space-y-4 min-h-[220px] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between pb-3 border-b border-teal-200/80">
+                <span className="text-xs font-bold text-teal-950 uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-teal-600"></span>
                   Santali in Ol Chiki Script:
                 </span>
-                <span className="text-[11px] text-slate-500 font-mono">
-                  Prototype Local Engine
-                </span>
+
+                {translatedResult && (
+                  <button
+                    onClick={handlePlaySantali}
+                    disabled={isPlaying}
+                    className="px-4 py-2 bg-teal-800 hover:bg-teal-900 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all"
+                  >
+                    <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-bounce text-amber-300' : ''}`} />
+                    <span>{isPlaying ? '🔊 आवाज चल रही है...' : '▶ आवाज सुनें (Play Voice)'}</span>
+                  </button>
+                )}
               </div>
 
               {translatedResult ? (
