@@ -236,7 +236,7 @@ export const TranslatorPage: React.FC = () => {
             Real-Time Classroom Speech Translation
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            CLASSROOM TRANSLATOR
+            LIVE TRANSLATOR
           </h1>
           <p className="text-sm text-slate-600 mt-1">
             Speak naturally. Translate instantly. Teach without internet.
@@ -536,9 +536,14 @@ export const TranslatorPage: React.FC = () => {
 
           {/* Main Ol Chiki Translated Box */}
           <div className="p-6 bg-teal-50/60 rounded-card border border-teal-200 space-y-4">
-            <span className="text-xs font-semibold text-teal-800 uppercase tracking-wide block">
-              Santali in Ol Chiki Script
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-teal-800 uppercase tracking-wide block">
+                Santali in Ol Chiki Script
+              </span>
+              <span className="text-[11px] text-slate-500 font-mono">
+                Prototype Local Engine
+              </span>
+            </div>
 
             {translatedResult ? (
               <div className="space-y-3">
@@ -594,8 +599,8 @@ export const TranslatorPage: React.FC = () => {
             )}
           </div>
 
-          {/* Actual Measured Latency Breakdown (Never fabricated!) */}
-          {metrics && (
+          {/* Actual Measured Latency Breakdown */}
+          {metrics ? (
             <div className="p-4 bg-slate-50 rounded-button border border-slate-200 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
@@ -640,9 +645,17 @@ export const TranslatorPage: React.FC = () => {
               </div>
 
               <div className="text-[11px] text-slate-500 pt-1 flex items-center justify-between">
-                <span>Adapter: <strong>{metrics.engineLabel}</strong></span>
+                <span>Underlying Engine: <strong>{metrics.engineLabel}</strong></span>
                 <span>Measured by <code>performance.now()</code></span>
               </div>
+            </div>
+          ) : (
+            <div className="p-3.5 bg-slate-50 rounded-button border border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                Execution Latency: <strong className="text-slate-700 ml-1">—</strong>
+              </span>
+              <span className="text-[11px] text-slate-400">Target &lt; 3.0s · Awaiting execution</span>
             </div>
           )}
         </div>

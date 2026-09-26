@@ -45,7 +45,7 @@ export const ClosingSection: React.FC = () => {
               to="/offline-demo"
               className="px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-button shadow-sm flex items-center gap-2 transition-colors min-h-[48px]"
             >
-              <span>Judge Offline Demonstration</span>
+              <span>Try Offline Demo</span>
               <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>

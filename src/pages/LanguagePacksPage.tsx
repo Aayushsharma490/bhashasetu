@@ -15,11 +15,13 @@ import {
 } from 'lucide-react';
 import OlChikiText from '../components/OlChikiText';
 import { LANGUAGE_PACKS_DATA, LanguagePack } from '../services/storage/localDatabase';
+import { useStorageEstimate } from '../hooks/useStorageEstimate';
 
 export const LanguagePacksPage: React.FC = () => {
   const [packs, setPacks] = useState<LanguagePack[]>(LANGUAGE_PACKS_DATA);
   const [syncingPackId, setSyncingPackId] = useState<string | null>(null);
   const [syncStep, setSyncStep] = useState<number>(0);
+  const estimate = useStorageEstimate();
 
   const steps = [
     'Step 1: Downloading vernacular language dictionaries...',
@@ -125,8 +127,8 @@ export const LanguagePacksPage: React.FC = () => {
 
                 <div className="flex items-center gap-2 shrink-0">
                   {isInstalled ? (
-                    <span className="px-3 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" /> Installed &amp; Offline Ready
+                    <span className="px-3 py-1.5 bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold rounded-full flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4" /> Installed · Prototype Engine Active
                     </span>
                   ) : (
                     <span className="px-3 py-1.5 bg-slate-200 text-slate-700 text-xs font-bold rounded-full flex items-center gap-1.5">
@@ -165,9 +167,11 @@ export const LanguagePacksPage: React.FC = () => {
                 <div className="p-3 bg-slate-50 rounded border border-slate-200">
                   <div className="flex items-center gap-1.5 text-slate-500 font-semibold mb-1">
                     <HardDrive className="w-3.5 h-3.5 text-slate-600" />
-                    <span>Local Storage Allocation</span>
+                    <span>Local Storage Usage</span>
                   </div>
-                  <p className="font-medium text-slate-800 font-mono">{pack.sizeMb} MB</p>
+                  <p className="font-medium text-slate-800 font-mono">
+                    {isInstalled ? (estimate.isAvailable ? estimate.usageFormatted : '—') : '—'}
+                  </p>
                 </div>
               </div>
 

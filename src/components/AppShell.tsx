@@ -29,7 +29,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/translator', label: 'Translator', icon: Mic, badge: 'Hero' },
+    { to: '/translator', label: 'Live Translator', icon: Mic },
     { to: '/conversation', label: 'Conversation', icon: MessageSquare },
     { to: '/lessons', label: 'Lessons', icon: BookOpen },
     { to: '/worksheets', label: 'Worksheets', icon: FileSpreadsheet },
@@ -131,16 +131,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                   <Icon className="w-4 h-4 shrink-0 text-slate-500" />
                   <span>{item.label}</span>
                 </div>
-                {item.badge && (
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 bg-teal-100 text-teal-800 rounded">
-                    {item.badge}
-                  </span>
-                )}
               </NavLink>
             );
           })}
 
-          {/* Highlighted SIH Judge Route */}
+          {/* Offline Demo route */}
           <div className="pt-2">
             <NavLink
               to="/offline-demo"
@@ -154,7 +149,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               }
             >
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Offline Proof (Judge)</span>
+              <span>Offline Demo</span>
             </NavLink>
           </div>
 
@@ -164,7 +159,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center justify-between px-3 py-2 text-xs text-slate-500 hover:text-slate-700 transition-colors"
             >
-              <span>View Landing Scroll</span>
+              <span>View Landing Page</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -189,8 +184,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 </span>
               </div>
             </div>
-            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-              Ready
+            <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 whitespace-nowrap">
+              Prototype Engine Active
             </span>
           </button>
         </div>

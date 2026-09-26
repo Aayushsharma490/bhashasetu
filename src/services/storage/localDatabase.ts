@@ -104,75 +104,10 @@ const STORAGE_KEYS = {
   LANGUAGE_PACKS: 'bhashasetu_lang_packs_v1'
 };
 
-// Default Realistic Seed Data
-const DEFAULT_TRANSLATIONS: StoredTranslation[] = [
-  {
-    id: 'tr-1',
-    timestamp: Date.now() - 1000 * 60 * 18,
-    timeFormatted: '09:42 AM',
-    sourceText: 'बच्चों, आज हम एक से दस तक की गिनती सीखेंगे।',
-    targetText: 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱢᱤᱫ ᱠᱷᱚᱱ ᱜᱮᱞ ᱫᱷᱟᱹᱵᱤᱡ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾',
-    sourceLang: 'hi',
-    targetLang: 'sat',
-    latencyMs: 1840,
-    mode: 'teacher'
-  },
-  {
-    id: 'tr-2',
-    timestamp: Date.now() - 1000 * 60 * 39,
-    timeFormatted: '09:21 AM',
-    sourceText: 'ᱢᱟᱹᱪᱮᱛ, ᱤᱧ ᱵᱟᱹᱧ ᱵᱩᱡᱷᱟᱹᱣ ᱞᱮᱫᱼᱟ᱾',
-    targetText: 'शिक्षक जी, मुझे समझ नहीं आया।',
-    sourceLang: 'sat',
-    targetLang: 'hi',
-    latencyMs: 1420,
-    mode: 'student'
-  },
-  {
-    id: 'tr-3',
-    timestamp: Date.now() - 1000 * 60 * 65,
-    timeFormatted: '08:55 AM',
-    sourceText: 'नमस्ते बच्चों, अपनी किताबें खोलो।',
-    targetText: 'ᱡᱚᱦᱟᱨ ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱟᱯᱮᱭᱟᱜ ᱯᱩᱛᱷᱤ ᱠᱚ ᱡᱷᱤᱡᱽ ᱯᱮ᱾',
-    sourceLang: 'hi',
-    targetLang: 'sat',
-    latencyMs: 1610,
-    mode: 'teacher'
-  }
-];
+// Initial Activity History starts empty on fresh session — no fake historical data
+const DEFAULT_TRANSLATIONS: StoredTranslation[] = [];
 
-const DEFAULT_CONVERSATIONS: StoredConversation[] = [
-  {
-    id: 'conv-1',
-    timestamp: Date.now() - 1000 * 60 * 12,
-    timeFormatted: '09:48 AM',
-    speaker: 'teacher',
-    sourceText: 'क्या तुम्हें यह समझ आया?',
-    targetText: 'ᱪᱮᱫ ᱟᱢ ᱱᱚᱣᱟᱢ ᱵᱩᱡᱷᱟᱹᱣ ᱠᱮᱫᱼᱟ?',
-    sourceLang: 'hi',
-    targetLang: 'sat'
-  },
-  {
-    id: 'conv-2',
-    timestamp: Date.now() - 1000 * 60 * 11,
-    timeFormatted: '09:49 AM',
-    speaker: 'student',
-    sourceText: 'ᱦᱮᱸ, ᱤᱧ ᱱᱚᱣᱟᱧ ᱵᱩᱡᱷᱟᱹᱣ ᱠᱮᱫᱼᱟ᱾',
-    targetText: 'हाँ, मुझे समझ आ गया।',
-    sourceLang: 'sat',
-    targetLang: 'hi'
-  },
-  {
-    id: 'conv-3',
-    timestamp: Date.now() - 1000 * 60 * 10,
-    timeFormatted: '09:50 AM',
-    speaker: 'teacher',
-    sourceText: 'बहुत अच्छा! शाबाश।',
-    targetText: 'ᱟᱹᱰᱤ ᱱᱟᱯᱟᱭ! ᱵᱮᱥ ᱩᱛᱟᱹᱨ᱾',
-    sourceLang: 'hi',
-    targetLang: 'sat'
-  }
-];
+const DEFAULT_CONVERSATIONS: StoredConversation[] = [];
 
 const DEFAULT_LESSONS: StoredLesson[] = [
   {

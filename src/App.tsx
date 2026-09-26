@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Scroll-Driven Marketing & Judge-Facing Landing Page */}
+        {/* Scroll-Driven Marketing & Product Landing Page */}
         <Route path="/" element={<LandingPage />} />
 
         {/* Application Core Routes wrapped in AppShell */}

@@ -17,17 +17,16 @@ import {
 } from 'lucide-react';
 import OlChikiText from '../components/OlChikiText';
 import { defaultTTSEngine } from '../services/ai/tts/TTSEngine';
+import { useStorageEstimate } from '../hooks/useStorageEstimate';
 
 export const OfflineDemoPage: React.FC = () => {
   const [airplaneMode, setAirplaneMode] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const estimate = useStorageEstimate();
 
   // Real-time measurements via performance.now()
-  const [asrTime, setAsrTime] = useState<number>(440);
-  const [nmtTime, setNmtTime] = useState<number>(310);
-  const [ttsTime, setTtsTime] = useState<number>(410);
-  const [totalTime, setTotalTime] = useState<number>(1160);
+  const [totalTime, setTotalTime] = useState<number | null>(null);
 
   const demoSteps = [
     {
@@ -86,14 +85,14 @@ export const OfflineDemoPage: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-in fade-in">
-      {/* Official Judge Demo Banner */}
+      {/* Classroom Offline Demonstration Banner */}
       <div className="bg-slate-900 text-white p-6 rounded-card shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-400 block mb-1">
-            Smart India Hackathon 2026 · Official 3-Minute Judge Flow
+          <span className="text-xs font-bold uppercase tracking-wider text-teal-400 block mb-1">
+            Smart India Hackathon 2026 · Interactive Demonstration
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            OFFLINE PROOF DEMONSTRATION
+            OFFLINE DEMONSTRATION MODE
           </h1>
           <p className="text-xs text-slate-300 mt-1">
             Problem Statement SIH26042 · Department of Higher &amp; Technical Education, Jharkhand
@@ -143,7 +142,7 @@ export const OfflineDemoPage: React.FC = () => {
         </div>
 
         <span className="text-xs font-mono font-bold text-emerald-900 bg-emerald-200/70 px-3 py-1 rounded-full whitespace-nowrap">
-          Offline Memory: 142.4 MB Loaded
+          {estimate.isAvailable ? `Offline Storage: ${estimate.usageFormatted}` : 'Offline Local Storage Active'}
         </span>
       </div>
 
@@ -151,7 +150,7 @@ export const OfflineDemoPage: React.FC = () => {
       <div className="bg-white p-6 rounded-card border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800">
-            Judge Sequence Navigation (Step {currentStep} of 5)
+            Classroom Workflow Navigation (Step {currentStep} of 5)
           </h2>
           <button
             onClick={() => setCurrentStep(1)}
@@ -296,16 +295,18 @@ export const OfflineDemoPage: React.FC = () => {
           <div className="p-4 bg-white rounded-button border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-slate-500" />
-              <span>SIH PS Target Latency: <strong>&lt; 3.0 sec</strong></span>
+              <span>Target Latency: <strong>&lt; 3.0 sec</strong></span>
             </div>
 
             <div className="flex items-center gap-3">
               <span className="text-slate-600 font-mono">
-                Measured: <strong>{(totalTime / 1000).toFixed(2)}s</strong>
+                Measured: <strong>{totalTime !== null ? `${(totalTime / 1000).toFixed(2)}s` : '—'}</strong>
               </span>
-              <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[11px] flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" /> Target Met
-              </span>
+              {totalTime !== null && (
+                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[11px] flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Target Met
+                </span>
+              )}
             </div>
           </div>
 

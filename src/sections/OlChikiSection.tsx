@@ -76,7 +76,7 @@ export const OlChikiSection: React.FC = () => {
                 <span className="text-xs font-bold px-2 py-0.5 bg-teal-100 text-teal-800 rounded-full flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Active in Prototype
                 </span>
-                <span className="text-xs text-slate-500 font-mono">142.4 MB Pack</span>
+                <span className="text-xs text-slate-500 font-mono">Active Language Pack</span>
               </div>
               <h4 className="text-lg font-bold text-slate-900">
                 Santali (<OlChikiText>ᱥᱟᱱᱛᱟᱲᱤ</OlChikiText>)

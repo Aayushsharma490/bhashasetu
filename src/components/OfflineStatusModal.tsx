@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, CheckCircle2, HardDrive, Cpu, Radio, BookOpen, Layers, ShieldCheck } from 'lucide-react';
 import OlChikiText from './OlChikiText';
+import { useStorageEstimate } from '../hooks/useStorageEstimate';
 
 interface OfflineStatusModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface OfflineStatusModalProps {
 }
 
 export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, onClose }) => {
+  const estimate = useStorageEstimate();
   if (!isOpen) return null;
 
   return (
@@ -29,7 +31,7 @@ export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, 
               <h2 id="offline-status-title" className="text-base font-semibold text-slate-900">
                 OFFLINE SYSTEM STATUS
               </h2>
-              <p className="text-xs text-slate-500">Device Hardware & Offline Services</p>
+              <p className="text-xs text-slate-500">Device Hardware &amp; Offline Services</p>
             </div>
           </div>
           <button
@@ -76,8 +78,8 @@ export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, 
                   <span className="text-xs text-slate-500">IndicConformer Adapter</span>
                 </div>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Ready
+              <span className="text-xs font-semibold px-2.5 py-1 bg-teal-50 text-teal-800 rounded-full flex items-center gap-1 border border-teal-200">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Prototype Engine Active
               </span>
             </div>
 
@@ -89,8 +91,8 @@ export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, 
                   <span className="text-xs text-slate-500">IndicTrans2 Adapter (Hindi ↔ Santali)</span>
                 </div>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Ready
+              <span className="text-xs font-semibold px-2.5 py-1 bg-teal-50 text-teal-800 rounded-full flex items-center gap-1 border border-teal-200">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Prototype Engine Active
               </span>
             </div>
 
@@ -102,8 +104,8 @@ export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, 
                   <span className="text-xs text-slate-500">Indic Parler-TTS Adapter</span>
                 </div>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Ready
+              <span className="text-xs font-semibold px-2.5 py-1 bg-teal-50 text-teal-800 rounded-full flex items-center gap-1 border border-teal-200">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Prototype Engine Active
               </span>
             </div>
 
@@ -111,12 +113,12 @@ export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, 
               <div className="flex items-center gap-3">
                 <BookOpen className="w-4 h-4 text-blue-600" />
                 <div>
-                  <span className="text-sm font-medium text-slate-800 block">Lesson & Worksheet Content</span>
+                  <span className="text-sm font-medium text-slate-800 block">Lesson &amp; Worksheet Content</span>
                   <span className="text-xs text-slate-500">JCERT NIPUN Bharat Primary Bank</span>
                 </div>
               </div>
               <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Available
+                <CheckCircle2 className="w-3.5 h-3.5" /> Available Locally
               </span>
             </div>
           </div>
@@ -126,18 +128,25 @@ export const OfflineStatusModal: React.FC<OfflineStatusModalProps> = ({ isOpen, 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <HardDrive className="w-4 h-4 text-slate-500" />
-                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Device Storage Allocation</span>
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                  Device Storage Allocation (Computed at Runtime)
+                </span>
               </div>
-              <span className="text-xs text-slate-500">142.4 MB of 8.2 GB</span>
+              <span className="text-xs text-slate-600 font-mono">
+                {estimate.isAvailable ? `${estimate.usageFormatted} used of ${estimate.quotaFormatted}` : '—'}
+              </span>
             </div>
             
             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-              <div className="bg-teal-600 h-full rounded-full" style={{ width: '4%' }}></div>
+              <div
+                className="bg-teal-600 h-full rounded-full transition-all"
+                style={{ width: `${Math.max(2, estimate.percentUsed)}%` }}
+              ></div>
             </div>
 
             <div className="flex items-center justify-between pt-1 text-xs text-slate-600">
               <span>Active Pack: <strong>Santali / <OlChikiText>ᱚᱞ ᱪᱤᱠᱤ</OlChikiText></strong></span>
-              <span className="text-emerald-700 font-medium">Model Ready</span>
+              <span className="text-teal-800 font-medium">Prototype Engine Active</span>
             </div>
           </div>
         </div>

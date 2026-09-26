@@ -10,10 +10,12 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { localDB, UserSettings } from '../services/storage/localDatabase';
+import { useStorageEstimate } from '../hooks/useStorageEstimate';
 
 export const SettingsPage: React.FC = () => {
   const [settings, setSettings] = useState<UserSettings>(() => localDB.getSettings());
   const [savedNotice, setSavedNotice] = useState(false);
+  const estimate = useStorageEstimate();
 
   const handleUpdate = (updated: Partial<UserSettings>) => {
     const next = { ...settings, ...updated };
@@ -127,29 +129,24 @@ export const SettingsPage: React.FC = () => {
       <div className="bg-white p-6 rounded-card border border-slate-200 shadow-sm space-y-4">
         <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
           <HardDrive className="w-4 h-4 text-slate-600" />
-          Offline Device Storage Allocation
+          Offline Device Storage Allocation (Computed at Runtime)
         </h2>
 
         <div className="p-4 bg-slate-50 rounded-button border border-slate-200 space-y-3">
           <div className="flex justify-between text-xs text-slate-700">
-            <span>Allocated for BhashaSetu Model Packs: <strong>142.4 MB</strong></span>
-            <span>Available Tablet Flash: <strong>8.2 GB</strong></span>
+            <span>Storage Used: <strong>{estimate.isAvailable ? estimate.usageFormatted : '—'}</strong></span>
+            <span>Device Storage Quota: <strong>{estimate.isAvailable ? estimate.quotaFormatted : '—'}</strong></span>
           </div>
 
           <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-            <div className="bg-teal-600 h-full rounded-full" style={{ width: '4%' }}></div>
+            <div
+              className="bg-teal-600 h-full rounded-full transition-all"
+              style={{ width: `${Math.max(2, estimate.percentUsed)}%` }}
+            ></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 text-[11px] text-slate-600">
-            <div className="p-2 bg-white rounded border border-slate-200">
-              <strong>ASR Weights:</strong> 48.0 MB
-            </div>
-            <div className="p-2 bg-white rounded border border-slate-200">
-              <strong>NMT Model:</strong> 68.0 MB
-            </div>
-            <div className="p-2 bg-white rounded border border-slate-200">
-              <strong>TTS &amp; Glossaries:</strong> 26.4 MB
-            </div>
+          <div className="text-[11px] text-slate-500 pt-1">
+            Data computed dynamically via <code>navigator.storage.estimate()</code>.
           </div>
         </div>
       </div>

@@ -18,14 +18,14 @@ export const OfflineProofSection: React.FC = () => {
   const sectionRef = useSectionReveal<HTMLElement>();
   const [airplaneMode, setAirplaneMode] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
-  const [stage, setStage] = useState<'idle' | 'speech' | 'nmt' | 'tts' | 'done'>('done');
+  const [stage, setStage] = useState<'idle' | 'speech' | 'nmt' | 'tts' | 'done'>('idle');
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
-  // Real timing records using performance.now()
-  const [asrTime, setAsrTime] = useState<number>(482);
-  const [nmtTime, setNmtTime] = useState<number>(315);
-  const [ttsTime, setTtsTime] = useState<number>(420);
-  const [totalTime, setTotalTime] = useState<number>(1217);
+  // Real timing records initialized to null until execution
+  const [asrTime, setAsrTime] = useState<number | null>(null);
+  const [nmtTime, setNmtTime] = useState<number | null>(null);
+  const [ttsTime, setTtsTime] = useState<number | null>(null);
+  const [totalTime, setTotalTime] = useState<number | null>(null);
 
   const runProofExecution = async () => {
     setIsRunning(true);
@@ -76,7 +76,7 @@ export const OfflineProofSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">
-            The SIH Judge-Facing Proof
+            Offline Operation Proof
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
             Proof of Offline Operation in Airplane Mode
@@ -161,7 +161,9 @@ export const OfflineProofSection: React.FC = () => {
 
                 <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
                   <span>Input source: Microphone</span>
-                  <span className="font-mono text-slate-600">ASR: {asrTime} ms</span>
+                  <span className="font-mono text-slate-600">
+                    ASR: {asrTime !== null ? `${asrTime} ms` : '—'}
+                  </span>
                 </div>
               </div>
 
@@ -172,7 +174,9 @@ export const OfflineProofSection: React.FC = () => {
                     <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
                       Student Mother Tongue (Santali / Ol Chiki)
                     </span>
-                    <span className="text-xs text-teal-700 font-medium">Translated Locally</span>
+                    <span className="text-[11px] text-teal-700 font-mono">
+                      Prototype Local Engine
+                    </span>
                   </div>
                   <p className="text-lg font-bold text-slate-900 leading-relaxed">
                     <OlChikiText>
@@ -204,7 +208,7 @@ export const OfflineProofSection: React.FC = () => {
                   </button>
 
                   <span className="text-xs font-mono text-slate-600">
-                    NMT: {nmtTime} ms
+                    NMT: {nmtTime !== null ? `${nmtTime} ms` : '—'}
                   </span>
                 </div>
               </div>
@@ -222,11 +226,13 @@ export const OfflineProofSection: React.FC = () => {
 
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-slate-500">
-                    SIH PS Requirement: <strong>&lt; 3.0 sec</strong>
+                    Target Latency: <strong>&lt; 3.0 sec</strong>
                   </span>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Target Met
-                  </span>
+                  {totalTime !== null && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Target Met
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -235,28 +241,28 @@ export const OfflineProofSection: React.FC = () => {
                 <div className="p-2 bg-white rounded border border-slate-200">
                   <span className="text-[11px] text-slate-500 block">ASR (Speech)</span>
                   <span className="text-sm font-bold text-slate-800 font-mono">
-                    {(asrTime / 1000).toFixed(2)}s
+                    {asrTime !== null ? `${(asrTime / 1000).toFixed(2)}s` : '—'}
                   </span>
                 </div>
 
                 <div className="p-2 bg-white rounded border border-slate-200">
                   <span className="text-[11px] text-slate-500 block">NMT (Translation)</span>
                   <span className="text-sm font-bold text-slate-800 font-mono">
-                    {(nmtTime / 1000).toFixed(2)}s
+                    {nmtTime !== null ? `${(nmtTime / 1000).toFixed(2)}s` : '—'}
                   </span>
                 </div>
 
                 <div className="p-2 bg-white rounded border border-slate-200">
                   <span className="text-[11px] text-slate-500 block">TTS (Synthesis)</span>
                   <span className="text-sm font-bold text-slate-800 font-mono">
-                    {(ttsTime / 1000).toFixed(2)}s
+                    {ttsTime !== null ? `${(ttsTime / 1000).toFixed(2)}s` : '—'}
                   </span>
                 </div>
 
                 <div className="p-2 bg-emerald-50 rounded border border-emerald-300">
                   <span className="text-[11px] text-emerald-800 block font-semibold">Total Roundtrip</span>
                   <span className="text-sm font-bold text-emerald-900 font-mono">
-                    {(totalTime / 1000).toFixed(2)}s
+                    {totalTime !== null ? `${(totalTime / 1000).toFixed(2)}s` : '—'}
                   </span>
                 </div>
               </div>
@@ -268,7 +274,7 @@ export const OfflineProofSection: React.FC = () => {
                   disabled={isRunning}
                   className="text-blue-900 font-semibold hover:underline"
                 >
-                  {isRunning ? 'Benchmarking...' : 'Re-measure Latency ⟳'}
+                  {isRunning ? 'Benchmarking...' : 'Run Measured Benchmark ⟳'}
                 </button>
               </div>
             </div>
