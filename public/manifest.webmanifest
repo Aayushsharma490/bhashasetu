@@ -1,0 +1,17 @@
+{
+  "short_name": "BhashaSetu",
+  "name": "BhashaSetu — Offline Classroom Assistant",
+  "description": "AI-Powered Vernacular Pedagogy and Real-Time Translation Tool for Mother Tongue-Based Primary Education",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/dashboard",
+  "background_color": "#F8FAFC",
+  "theme_color": "#1E3A8A",
+  "display": "standalone",
+  "orientation": "landscape"
+}

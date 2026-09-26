@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-primary: #1E3A8A;
+  --brand-secondary: #0D9488;
+  --brand-accent: #D97706;
+  --ink: #0F172A;
+  --ink-soft: #475569;
+  --surface: #FFFFFF;
+  --surface-alt: #F8FAFC;
+  --border: #E2E8F0;
+}
+
+@layer base {
+  body {
+    color: var(--ink);
+    background-color: var(--surface-alt);
+    font-family: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Ensure Ol Chiki text renders cleanly without tofu fallback */
+.font-olchiki, [lang="sat"] {
+  font-family: 'Noto Sans Ol Chiki', 'Inter', system-ui, sans-serif !important;
+  font-feature-settings: "kern" 1;
+}
+
+.font-hindi, [lang="hi"] {
+  font-family: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+}
+
+/* Print styling for A4 bilingual worksheets */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .worksheet-a4-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
