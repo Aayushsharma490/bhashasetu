@@ -219,8 +219,8 @@ export const ConversationPage: React.FC = () => {
                     <span className="text-[10px] uppercase font-semibold text-teal-800 block">
                       Translated Classroom Audio:
                     </span>
-                    <p className="text-base font-bold text-slate-900 leading-relaxed">
-                      {isTeacher ? <OlChikiText>{msg.targetText}</OlChikiText> : <span className="font-hindi">{msg.targetText}</span>}
+                    <p className="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed">
+                      {isTeacher ? <span className="font-ol-chiki text-teal-950 text-xl sm:text-2xl"><OlChikiText>{msg.targetText}</OlChikiText></span> : <span className="font-hindi">{msg.targetText}</span>}
                     </p>
                   </div>
 

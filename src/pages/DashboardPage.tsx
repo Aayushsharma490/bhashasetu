@@ -114,8 +114,8 @@ export const DashboardPage: React.FC = () => {
             <span className="font-semibold text-slate-800">Mathematics</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-slate-500">Topic:</span>
-            <span className="font-semibold text-slate-800">Counting 1–10</span>
+            <span className="text-slate-500">Curriculum:</span>
+            <span className="font-semibold text-slate-800">Grades 1–5 Aligned</span>
           </div>
           <div className="flex items-center justify-between pt-1 border-t border-slate-200 text-slate-500">
             <span className="flex items-center gap-1">

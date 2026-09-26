@@ -1,11 +1,79 @@
 import { TTSEngine, TTSOptions, TTSResult } from '../types';
 
 /**
- * Phonetic transliteration map for Ol Chiki characters to phonetic Devanagari/Latin
+ * Phonetic transliteration map for Ol Chiki characters to phonetic Devanagari
  * Allows SpeechSynthesis to speak Santali naturally using Indian speech voices without broken sounds.
  */
-const OL_CHIKI_PHONETIC_DICT: Record<string, string> = {
-  // Common classroom phrases
+const OL_CHIKI_TO_HINDI: Record<string, string> = {
+  // Vowels
+  'ᱚ': 'ऑ',
+  'ᱟ': 'आ',
+  'ᱤ': 'इ',
+  'ᱩ': 'उ',
+  'ᱮ': 'ए',
+  'ᱳ': 'ओ',
+  // Consonants
+  'ᱛ': 'त्',
+  'ᱜ': 'ग्',
+  'ᱝ': 'ं',
+  'ᱞ': 'ल्',
+  'ᱠ': 'क्',
+  'ᱡ': 'ज्',
+  'ᱢ': 'म्',
+  'ᱣ': 'व्',
+  'ᱥ': 'स्',
+  'ᱦ': 'ह्',
+  'ᱧ': 'ञ्',
+  'ᱨ': 'र्',
+  'ᱪ': 'च्',
+  'ᱫ': 'द्',
+  'ᱬ': 'ण्',
+  'ᱭ': 'य्',
+  'ᱯ': 'प्',
+  'ᱰ': 'ड्',
+  'ᱱ': 'न्',
+  'ᱲ': 'ड़्',
+  'ᱴ': 'ट्',
+  'ᱵ': 'ब्',
+  'ᱶ': 'व्',
+  'ᱷ': 'ह्',
+  // Modifiers
+  'ᱸ': 'ं',
+  'ᱹ': '',
+  'ᱺ': '',
+  'ᱻ': '',
+  'ᱼ': '',
+  'ᱽ': '',
+  // Punctuations & Digits
+  '᱾': '.',
+  '᱿': '.',
+  '᱐': '0',
+  '᱑': '1',
+  '᱒': '2',
+  '᱓': '3',
+  '᱔': '4',
+  '᱕': '5',
+  '᱖': '6',
+  '᱗': '7',
+  '᱘': '8',
+  '᱙': '9'
+};
+
+const OL_CHIKI_TO_LATIN: Record<string, string> = {
+  'ᱚ': 'o', 'ᱛ': 't', 'ᱜ': 'g', 'ᱝ': 'ṅ', 'ᱞ': 'l',
+  'ᱟ': 'a', 'ᱠ': 'k', 'ᱡ': 'j', 'ᱢ': 'm', 'ᱣ': 'w',
+  'ᱤ': 'i', 'ᱥ': 's', 'ᱦ': 'h', 'ᱧ': 'ñ', 'ᱨ': 'r',
+  'ᱩ': 'u', 'ᱪ': 'c', 'ᱫ': 'd', 'ᱬ': 'ṇ', 'ᱭ': 'y',
+  'ᱮ': 'e', 'ᱯ': 'p', 'ᱰ': 'ḍ', 'ᱱ': 'n', 'ᱲ': 'ṛ',
+  'ᱳ': 'o', 'ᱴ': 'ṭ', 'ᱵ': 'b', 'ᱶ': 'v', 'ᱷ': 'h',
+  'ᱸ': '̃', 'ᱹ': '̣', 'ᱺ': ':', 'ᱻ': '\'', 'ᱼ': '-', 'ᱽ': '\'',
+  '᱾': '.', '᱿': '.',
+  '᱐': '0', '᱑': '1', '᱒': '2', '᱓': '3', '᱔': '4',
+  '᱕': '5', '᱖': '6', '᱗': '7', '᱘': '8', '᱙': '9'
+};
+
+// Known phrase phonetic dictionary for ultra-natural pronunciation
+const KNOWN_PHONETIC_PHRASES: Record<string, string> = {
   'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱢᱤᱫ ᱠᱷᱚᱱ ᱜᱮᱞ ᱫᱷᱟᱹᱵᱤᱡ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
     'गिदरा को, तेहेंज आबो मिद खोन गेल धाबिच लेखा बोन चेदोआ',
   'ᱪᱮᱫ ᱟᱢ ᱱᱚᱣᱟᱢ ᱵᱩᱡᱷᱟᱹᱣ ᱠᱮᱫᱼᱟ?':
@@ -32,80 +100,47 @@ const OL_CHIKI_PHONETIC_DICT: Record<string, string> = {
     'इंज लेखा दाड़ेयाग कानांज',
   'ᱟᱹᱞᱤᱧ ᱥᱟᱹᱛ ᱠᱮᱫᱼᱟᱹᱞᱤᱧ᱾':
     'आलिंज सात केद आलिंज',
-
-  // Vocabulary words
-  'ᱜᱟᱹᱭ': 'गई',
-  'ᱥᱮᱛᱟ': 'सेता',
-  'ᱯᱩᱥᱤ': 'पुसी',
-  'ᱪᱮᱬᱮ': 'चेड़े',
-  'ᱦᱟᱹᱠᱩ': 'हाकु',
-  'ᱦᱟᱹᱛᱤ': 'हाती',
-  'ᱫᱟᱨᱮ': 'दारे',
-  'ᱫᱟᱜ': 'दाग',
-  'ᱵᱟᱦᱟ': 'बाहा',
-  'ᱢᱤᱫ': 'मिद',
-  'ᱵᱟᱨ': 'बार',
-  'ᱯᱮ': 'पे',
-  'ᱯᱩᱱ': 'पून',
-  'ᱢᱚᱬᱮ': 'मोड़े',
-  'ᱛᱩᱨᱩᱭ': 'तुरुय',
-  'ᱮᱭᱟᱭ': 'एयाय',
-  'ᱤᱨᱟᱹᱞ': 'इरल',
-  'ᱟᱨᱮ': 'आरे',
-  'ᱜᱮᱞ': 'गेल',
-  'ᱟᱨᱟᱜ': 'आराग',
-  'ᱦᱟᱹᱨᱤᱭᱟᱹᱲ': 'हरियर',
-  'ᱯᱩᱸᱰ': 'पुंड',
-  'ᱦᱮᱸᱫᱮ': 'हेंदे',
-  'ᱯᱩᱛᱷᱤ': 'पुथी',
-  'ᱚᱞ ᱠᱟᱹᱴᱤ': 'ओल काटी',
-  'ᱟᱥᱲᱟ': 'आसड़ा',
-  'ᱟᱭᱳ': 'आयो',
-  'ᱵᱟᱵᱟ': 'बाबा',
-  'ᱩᱞ': 'उल',
-  'ᱫᱟᱠᱟ': 'दाका'
+  'ᱛᱮᱦᱮᱧ ᱟᱵᱚ ᱦᱟᱹᱴᱤᱧ ᱮᱞᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾':
+    'तेहेंज आबो हाटिं एल्खा बोन चेदोआ'
 };
 
-// Character fallback mapper for arbitrary Ol Chiki words
-const OL_CHIKI_CHAR_MAP: Record<string, string> = {
-  'ᱚ': 'ओ', 'ᱛ': 'त्', 'ᱜ': 'ग्', 'ᱝ': 'ं', 'ᱞ': 'ल्',
-  'ᱟ': 'आ', 'ᱠ': 'क्', 'ᱡ': 'ज्', 'ᱢ': 'म्', 'ᱣ': 'व्',
-  'ᱤ': 'इ', 'ᱥ': 'स्', 'ᱦ': 'ह्', 'ᱧ': 'ंज', 'ᱨ': 'र्',
-  'ᱩ': 'उ', 'ᱪ': 'च्', 'ᱫ': 'द्', 'ᱬ': 'ण्', 'ᱭ': 'य्',
-  'ᱮ': 'ए', 'ᱯ': 'प्', 'ᱰ': 'ड्', 'ᱱ': 'न्', 'ᱲ': 'ड़',
-  'ᱳ': 'ओ', 'ᱴ': 'ट्', 'ᱵ': 'ब्', 'ᱶ': 'व्', 'ᱷ': 'ह्',
-  'ᱸ': 'ं', 'ᱹ': '', 'ᱺ': '', 'ᱻ': '', 'ᱼ': '', 'ᱽ': '',
-  '᱾': '.', '᱿': '.',
-  '᱐': '0', '᱑': '1', '᱒': '2', '᱓': '3', '᱔': '4',
-  '᱕': '5', '᱖': '6', '᱗': '7', '᱘': '8', '᱙': '9'
-};
-
-function transliterateOlChikiForSpeech(input: string): string {
+export function transliterateOlChikiForSpeech(input: string): string {
   const clean = input.trim();
-  // Check exact whole sentence match
-  if (OL_CHIKI_PHONETIC_DICT[clean]) {
-    return OL_CHIKI_PHONETIC_DICT[clean];
+  if (KNOWN_PHONETIC_PHRASES[clean]) {
+    return KNOWN_PHONETIC_PHRASES[clean];
   }
 
-  // Check known words replacement
-  let result = clean;
-  for (const [olChiki, phonetic] of Object.entries(OL_CHIKI_PHONETIC_DICT)) {
-    if (result.includes(olChiki)) {
-      result = result.split(olChiki).join(phonetic);
+  // Segment by words and transliterate
+  const words = clean.split(/\s+/);
+  const outWords = words.map((w) => {
+    let wordSound = '';
+    for (let i = 0; i < w.length; i++) {
+      const ch = w[i];
+      if (OL_CHIKI_TO_HINDI[ch] !== undefined) {
+        wordSound += OL_CHIKI_TO_HINDI[ch];
+      } else {
+        wordSound += ch;
+      }
     }
-  }
+    // Clean trailing halants in speech for smoother vocalization
+    return wordSound.replace(/्$/, '').replace(/्([.?!])/g, '$1');
+  });
 
-  // Any remaining Ol Chiki characters transliterated glyph-by-glyph
-  let finalStr = '';
-  for (const ch of result) {
-    if (OL_CHIKI_CHAR_MAP[ch] !== undefined) {
-      finalStr += OL_CHIKI_CHAR_MAP[ch];
+  return outWords.join(' ') || clean;
+}
+
+export function getLatinPronunciation(input: string): string {
+  const clean = input.trim();
+  let latin = '';
+  for (let i = 0; i < clean.length; i++) {
+    const ch = clean[i];
+    if (OL_CHIKI_TO_LATIN[ch] !== undefined) {
+      latin += OL_CHIKI_TO_LATIN[ch];
     } else {
-      finalStr += ch;
+      latin += ch;
     }
   }
-
-  return finalStr || clean;
+  return latin || clean;
 }
 
 export class LocalPrototypeTTSEngine implements TTSEngine {
@@ -116,7 +151,7 @@ export class LocalPrototypeTTSEngine implements TTSEngine {
     const startTime = performance.now();
 
     // Emulate acoustic synthesis timing (real measured delta)
-    const simulatedInferenceDuration = Math.min(600, Math.max(280, Math.floor(text.length * 5) + 240));
+    const simulatedInferenceDuration = Math.min(500, Math.max(220, Math.floor(text.length * 4) + 180));
     await new Promise((resolve) => setTimeout(resolve, simulatedInferenceDuration));
 
     const durationMs = Math.round(performance.now() - startTime);
@@ -133,8 +168,11 @@ export class LocalPrototypeTTSEngine implements TTSEngine {
 
       window.speechSynthesis.cancel();
 
+      // Brief delay to allow browser synthesis pipeline to clear
+      await new Promise((r) => setTimeout(r, 40));
+
       const utterance = new SpeechSynthesisUtterance(speechText);
-      utterance.rate = options.rate || 0.92; // Natural, clear classroom pacing
+      utterance.rate = options.rate || 0.90; // Natural, clear classroom pacing
       utterance.pitch = options.pitch || 1.0;
 
       // Select natural Indian voice
@@ -142,10 +180,12 @@ export class LocalPrototypeTTSEngine implements TTSEngine {
       const preferredVoice = voices.find(
         (v) =>
           v.lang.toLowerCase().includes('hi-in') ||
+          v.lang.toLowerCase().includes('hi_in') ||
           v.lang.toLowerCase().includes('hi') ||
           v.lang.toLowerCase().includes('bn-in') ||
           v.lang.toLowerCase().includes('en-in') ||
-          v.name.toLowerCase().includes('india')
+          v.name.toLowerCase().includes('india') ||
+          v.name.toLowerCase().includes('hindi')
       );
 
       if (preferredVoice) {
@@ -157,7 +197,10 @@ export class LocalPrototypeTTSEngine implements TTSEngine {
 
       return new Promise<void>((resolve) => {
         utterance.onend = () => resolve();
-        utterance.onerror = () => resolve();
+        utterance.onerror = (e) => {
+          console.warn('Speech synthesis ended or had notice:', e);
+          resolve();
+        };
         window.speechSynthesis.speak(utterance);
       });
     };

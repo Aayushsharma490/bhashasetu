@@ -53,10 +53,14 @@ export interface StoredWorksheet {
     id: number;
     questionHi: string;
     questionSat: string;
-    type: 'count' | 'match' | 'fill' | 'choice';
+    type: 'count' | 'match' | 'fill' | 'choice' | 'fraction' | 'multiplication';
     visualAsset?: string;
     options?: string[];
   }>;
+  matchingPairs?: Array<{ left: string; right: string; rightOlChiki: string }>;
+  fillBlanks?: Array<{ questionHi: string; questionSat: string; answer: string }>;
+  mathProblems?: Array<{ questionHi: string; questionSat: string; answer: string; satAnswer: string }>;
+  assessmentRubric?: Array<{ criteriaHi: string; criteriaSat: string; level: string }>;
   createdAt: number;
 }
 
