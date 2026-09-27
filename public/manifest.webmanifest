@@ -1,17 +1,35 @@
 {
   "short_name": "BhashaSetu",
   "name": "BhashaSetu — Offline Classroom Assistant",
-  "description": "AI-Powered Vernacular Pedagogy and Real-Time Translation Tool for Mother Tongue-Based Primary Education",
+  "description": "AI-Powered Vernacular Pedagogy and Real-Time Translation Tool for Mother Tongue-Based Primary Education. SIH26042, Govt. of Jharkhand.",
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "192x192 512x512"
+      "sizes": "any",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/dashboard",
+  "scope": "/",
   "background_color": "#F8FAFC",
   "theme_color": "#1E3A8A",
   "display": "standalone",
-  "orientation": "landscape"
+  "orientation": "any",
+  "lang": "hi",
+  "categories": ["education", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Live Translator",
+      "short_name": "Translate",
+      "url": "/translator",
+      "description": "Real-time speech translation"
+    },
+    {
+      "name": "Lessons",
+      "short_name": "Lessons",
+      "url": "/lessons",
+      "description": "Classroom lessons"
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Mic,
@@ -10,11 +10,11 @@ import {
   Globe2,
   History,
   Settings,
-  Info,
   ShieldCheck,
   Menu,
   X,
-  ExternalLink
+  ExternalLink,
+  MoreHorizontal
 } from 'lucide-react';
 import OfflineStatusModal from './OfflineStatusModal';
 import OlChikiText from './OlChikiText';
@@ -26,6 +26,7 @@ interface AppShellProps {
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const [isOfflineModalOpen, setIsOfflineModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -39,6 +40,14 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     { to: '/settings', label: 'Settings', icon: Settings }
   ];
 
+  // Bottom nav items — top 4 most-used + "More" to open sidebar drawer
+  const bottomNavItems = [
+    { to: '/dashboard', label: 'Home', icon: LayoutDashboard },
+    { to: '/translator', label: 'Translate', icon: Mic },
+    { to: '/lessons', label: 'Lessons', icon: BookOpen },
+    { to: '/offline-demo', label: 'Offline', icon: ShieldCheck },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row text-slate-900 font-sans">
       {/* Top Header on Mobile */}
@@ -47,7 +56,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle navigation menu"
-            className="p-2 text-slate-700 hover:bg-slate-100 rounded-button min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 text-slate-700 hover:bg-slate-100 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -63,22 +72,30 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           onClick={() => setIsOfflineModalOpen(true)}
           className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-full text-xs font-semibold"
         >
-          <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>OFFLINE</span>
         </button>
       </header>
 
+      {/* Full-screen overlay when mobile menu is open */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/40 z-30 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar for Tablet / Desktop */}
       <aside
-        className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r border-slate-200 flex flex-col z-40 transition-transform duration-200 ease-in-out ${
+        className={`fixed top-0 left-0 h-screen w-64 bg-white border-r border-slate-200 flex flex-col z-40 transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
+        } md:sticky md:h-screen`}
       >
         {/* Brand header */}
         <div className="p-5 border-b border-slate-100">
           <div className="flex items-center justify-between">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center gap-2.5 group"
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -119,7 +136,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 to={item.to}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-3 py-2.5 rounded-button text-sm font-medium transition-colors min-h-[44px] ${
+                  `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
                     isActive
                       ? 'bg-blue-50 text-blue-900 font-semibold border-l-4 border-blue-900 rounded-l-none'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
@@ -140,7 +157,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               to="/offline-demo"
               onClick={() => setIsMobileMenuOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 px-3 py-2.5 rounded-button text-xs font-semibold uppercase tracking-wider transition-colors min-h-[44px] border ${
+                `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors min-h-[44px] border ${
                   isActive
                     ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
                     : 'bg-emerald-50/70 text-emerald-800 border-emerald-200 hover:bg-emerald-100/60'
@@ -168,7 +185,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         <div className="p-3 border-t border-slate-200 bg-slate-50/50">
           <button
             onClick={() => setIsOfflineModalOpen(true)}
-            className="w-full text-left p-2.5 rounded-button border border-emerald-200 bg-white hover:bg-emerald-50/40 transition-colors flex items-center justify-between group"
+            className="w-full text-left p-2.5 rounded-lg border border-emerald-200 bg-white hover:bg-emerald-50/40 transition-colors flex items-center justify-between group"
             title="Click to inspect offline subsystem status"
           >
             <div className="flex items-center gap-2">
@@ -218,11 +235,56 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           </div>
         </div>
 
-        {/* Content child container */}
-        <div className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
+        {/* Content child container — extra bottom padding on mobile for bottom nav */}
+        <div className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto pb-24 md:pb-8">
           {children}
         </div>
       </main>
+
+      {/* ───── MOBILE BOTTOM NAVIGATION BAR ───── */}
+      {/* Thumbzone-friendly, safe-area aware, shown only on mobile */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        aria-label="Mobile bottom navigation"
+      >
+        <div className="flex items-stretch">
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.to;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] transition-colors ${
+                  isActive
+                    ? 'text-blue-900 bg-blue-50/60'
+                    : 'text-slate-500 hover:text-slate-700 active:bg-slate-100'
+                }`}
+                aria-label={item.label}
+              >
+                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-900' : 'text-slate-400'}`} />
+                <span className={`text-[10px] font-semibold leading-none ${isActive ? 'text-blue-900' : 'text-slate-400'}`}>
+                  {item.label}
+                </span>
+                {isActive && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-blue-900 rounded-t-full" />
+                )}
+              </NavLink>
+            );
+          })}
+
+          {/* "More" button opens the full sidebar drawer */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-slate-500 hover:text-slate-700 active:bg-slate-100 transition-colors"
+            aria-label="More navigation options"
+          >
+            <MoreHorizontal className="w-5 h-5 text-slate-400" />
+            <span className="text-[10px] font-semibold leading-none text-slate-400">More</span>
+          </button>
+        </div>
+      </nav>
 
       {/* Offline Status Modal */}
       <OfflineStatusModal
